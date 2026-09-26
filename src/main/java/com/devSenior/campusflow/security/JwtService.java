@@ -1,26 +1,19 @@
 package com.devSenior.campusflow.security;
 
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private final SecretKey clave;
-    private final long expiracionMs = 1000 * 60 * 60; // 1 hora
+    private final SecretKey clave = Keys.hmacShaKeyFor(
+            "clave-secreta-campusflow-cambiar-en-produccion-2026".getBytes());
 
-    public JwtService(@Value("${JWT_SECRET}") String secretoBase64) {
-        this.clave = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretoBase64));
-    }
+    private final long expiracionMs = 1000 * 60 * 60; // 1 hora
 
     public String generarToken(String email, String rol) {
         Date ahora = new Date();
